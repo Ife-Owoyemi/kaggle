@@ -1,6 +1,4 @@
 Contest Lifecycle
-
-
 1) Sign up for new contest
 2) Make directory with full contest name
 3) Put inputs in the folder with the conventional names of "tain.csv" and "test.csv"
