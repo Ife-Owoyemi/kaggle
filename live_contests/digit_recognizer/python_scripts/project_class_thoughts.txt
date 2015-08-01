@@ -1,0 +1,35 @@
+# One of the goals is to make it easy to run test on the run.
+# Limit the crush that is having to write code or find a good medium between writing and free lance testing.
+# In theory making it easier to run it like I am doing testing in R.
+# Some notes on R.  R allows you to have a terminal running, it opens visual files for you, and shows you what kinds of things you have available.
+# We are going to achieve some of this functionality through the use of classes
+# Classes so far
+  Project
+	Classification
+	Regression
+  Prediction
+  Ensemble method- kind of a container of predictions
+  Feature Selection
+These classes handle the different parts of managing a data project in a file.
+The important part of a data project is to iteratively improve the prediction we have, while tracking what we have done and why we think its good or bad.  
+# Things that are unique to a person
+# Things that are unique to a project
+The above are two things that we want to essentially track.  In theory we also want to keep track of the contributions people have made.
+# As far as writing code goes, it is simple enough to put your name in comments on the parts that you wrote, that is not the type of work we want to track. Writing implementations of predictions is simple given that most of the work is in libraries.
+# What we want to do is to keep track of the contributions people make intellectually.
+# So the use of the functions, the outputs, and the results of the outputs.
+# Together the project has the steps above.  Understanding why a certain method was used during a certain part is key.
+Why this feature selection?
+Why this algorithm?
+Why this Ensemble method?
+How did the submission perform?
+We need to keep track on our end which prediction in a project is doing the best and look at the notes on that prediction components so that we can improve on it.  Or see where we can improve upon it.
+We also should keep track on what is being worked on by other people.
+What was the last submission that was made.
+The real problem that I just thought of was version controlling the object perminance part.  We cant all really work on an object that is going to be changing and not synchronized.######!!!!
+I will now let that go in order to think through the segmentation of a project for analysis on what part will benefit most from improvement.
+# Also, what about different section of a method.
+So we begin by opening a project
+The project should know who I am based on the file I keep in mrepository
+The files name is "stats.txt"
+
