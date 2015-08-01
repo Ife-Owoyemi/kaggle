@@ -1,0 +1,44 @@
+Contract:
+	Manage Data
+	Track Data manipulations
+Class Variables:
+	The following are used to find the appropriate directories within when the pipeline is place within a kaggle problem folder
+		input_data_filepath
+		intermediary_data_filepath
+		output_data_filepath
+		log_data_filepath
+		train_data_filename
+		test_data_filename
+	y_col: 
+Object Variables:
+	name
+	percent_train
+	load_report
+	output_label1
+	output_label2
+	label_xy
+	unlabeled_x
+	num_features
+	num_examples
+	x_test
+	y_test
+	num_train_rows
+	num_cross_val_rows
+	cross_val
+	y_train
+	y_cross_val
+	log_array
+Methods:
+	Constructor
+	Get Submission Format
+	Compressed File Input
+		Load raw data as featured
+	Compressed File Output
+		Intermediary
+			Write Intermediary File
+		Submissions
+			Write Compressed Submission
+	Split Train CSV
+	Load Report(Might Be Moved)
+	Compile Report(Might Be Moved)
+	Write Log

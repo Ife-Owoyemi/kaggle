@@ -1,0 +1,34 @@
+Tasks for Jie
+Dear Jie,
+	Good morning, or afternoon if thats when your reading this.
+	I have outlined some tasks that you could complete in order to help us get this managing system up and running so we can do some real Kaggle work!!!
+	It might help for you to get caught up on the structure of the program, though I have provided enough information in the below tasks that you dont need to, but in the event that you might want to you can read the design notes in the following file, Kaggle/file_managment_design/kaggle_project_manager_design_proposal
+1)How do we represent the log xml in memory?
+	The log file can be found Kaggle/live_contests/contest_template/logs/exampleLogFile.xml
+	There is a thing in python called the ElementTree
+	If you could read up on it
+		1) Determine what we need to make a new file "Element Tree object" in the _init_ of the MLPipelineManager object
+		2) What we need from each event to make input the method element into the "Element Tree object"
+		3) Not necessary but would be nice:
+			Function that reads an xml file if it exists, into an "Element Tree Object" during an _init_.  This will be used for efficiency purposes
+2)Review the read from compressed file,
+3)Review write to compressed file
+
+4)Can you write a function for this problem?
+	Say we want to use a function from scrit learn.
+	Its one we havent used before so we have to wrap it.
+	You can find the instructions of wrapping with a before and after here Kaggle/documentation/functionWrapperChecklist.txt
+
+	The most annoying part of that is having to create the signature for the run method for the object.
+
+	So I want to have something that takes in the following dictionary that we get from that wrapper functions DEFAULTPARAMS
+		DEFAULTPARAMS = {"n_neighbors": 5, "weights": "uniform", "algorithm":"auto", "leaf_size": 30, "metric": "minkowski", "p": 2, "metric_params":None}
+	and generate the following function signature
+		(n_neighbors = self.params["n_neighbors"], weights = self.params["weights"], algorithm = self.params["auto"], leaf_size = self.params["leaf_size"], metric = self.params["metric"], metric_params = self.params["metric_params"])
+	really just concatenate 
+	signature = "("
+	Loop
+		param_name = DEFAULTPARAMS["key"]
+		signature += param_name + '=' + 'self.params["' + param_name + '"],'
+	signature += ')'
+	Something like that
