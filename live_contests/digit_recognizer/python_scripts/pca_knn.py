@@ -12,14 +12,16 @@ train_x = train.values[:,1:]
 train_y = train.ix[:,0]
 test_x = test.values
 
+#Complexity of this implementation is n^3
 pca = PCA(n_components=0.8)
+
 train_x = pca.fit_transform(train_x)
 test_x = pca.transform(test_x)
 
-
+# Makes the object
 neigh = KNeighborsClassifier(n_neighbors=4)
 neigh.fit(train_x, train_y)
-
 test_y = neigh.predict(test_x)
+
 pd.DataFrame({"ImageId": range(1,len(test_y)+1), "Label": test_y}).to_csv('out.csv', index=False, header=True)
         

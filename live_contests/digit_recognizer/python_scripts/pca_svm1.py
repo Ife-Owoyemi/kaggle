@@ -1,4 +1,5 @@
 import pandas as pd
+import gzip
 from sklearn.decomposition import PCA, KernelPCA
 from sklearn import svm
 # Run PCA Function####################
@@ -10,14 +11,14 @@ interval = .01
 num_intervals = 15 # starting_threshold + interval* num_intervals <= 1
 # Arguments for kernel
 test_kernels = 0
-default_value = 'rbf'
+default_kernel = 'rbf'
 kernel_types = ["linear", "poly", "rbf", "sigmoid"]
 
 if(starting_threshold + interval*num_intervals > 1):
     print "Your PCA threshold will exceed 100"
 # The competition datafiles are in the directory ../input
-train = pd.read_csv("train.csv")
-test  = pd.read_csv("test.csv")
+train = pd.read_csv("../data/input/train.csv")
+test  = pd.read_csv("../data/input/test.csv")
 
 # Train Set
 train_x = train.values[1:33600,1:]
@@ -28,6 +29,11 @@ cval_y = train.values[33601:,0]
 # Test Set
 test_x = test.values
 most = 0;
+# PCA Test function
+
+# returns optimal parameter
+# consider a wrapping function for the prediction algorithms.  In theory, they should be classes, that you set the parameters to as you find the optimal ones.ch
+#def PCA(, [):
 
 if(test_threshold):
     # Loop through a predetermed amount of ranges
@@ -54,10 +60,7 @@ if(test_threshold):
                 best_index = i
 else:
     best_index = default_threshold
-if(test_kernel):
-    
-else:
-    best_kernel = default_kernel
+best_kernel = default_kernel
 # Reducing Dim
 pca = PCA(n_components = starting_threshold + best_index*interval, whiten = True)
 train_x = pca.fit_transform(train_x)
@@ -66,5 +69,9 @@ test_x = pca.transform(test_x)
 svc = svm.SVC(kernel='rbf',C=10)
 svc.fit(train_x, train_y)
 test_y = svc.predict(test_x)
-pd.DataFrame({"ImageId": range(1,len(test_y)+1), "Label": test_y}).to_csv('out.csv', index=False, header=True)
-                
+pd.DataFrame({"ImageId": range(1,len(test_y)+1), "Label": test_y}).to_csv('../data/output/out.csv', index=False, header=True)
+f_in = open('../data/output/out.csv', 'rb')
+f_out = gzip.open('../data/output/out.csv.gz', 'wb')
+f_out.writelines(f_in)
+f_out.close()
+f_in.close()
