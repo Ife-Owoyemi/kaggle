@@ -1,7 +1,0 @@
-New Script Checklist
-1: Input Data: place in "input" directory with names, "test.csv.gzip", "train.csv.gzip"
-2: Output data: a sample output should be placed in the "output.csv.gzip" this will be used in formatting the compressed output by the instance of the pipeline class
-3: All pipelines scripts will be placed in the "pipeline" folder
-4: Log files for each pipeline will be stored in the log folder
-5: make the name of the competition exactly as it is on the kaggle website, we might need it to be for the automatic submission
-6: Put any notes about the compettion(competition specific data!) in your own notes file with your name->look at the attached documents
