@@ -1,0 +1,49 @@
+For now we really just need something that takes a submission file(compressed) and returns a double
+
+somthing along the lines of 
+
+double submit(submission_file.gz){
+	This part im not sure how to do
+}
+
+
+
+THE REST OF THIS IS FOR IMPLEMENTATION INTO THE FILE SYSTEM, BUT FOR NOW YOU CAN IGNORE IT.
+///////////////////////////////////////////////////
+
+Python File should just write the file and store it in the submitted folder.
+
+We can submit a certain amount of times a day for a given competition.
+
+The chron file should know this and try to submit as many times a day as possible.
+
+The chron should submit all the files for a given problem in a given day.
+
+So it should know what problems are live and what problems have submission files waiting to be submitted.
+
+Each problem has a certain definition of a day.
+
+Can we get a submission trial 1 hour after the start of the problem day, and then 12 hours after that.
+
+Now we need a way to store the outputs of the chron.
+And map them to a name
+
+So now we have a log file that stores 
+Live problems and the day start times, and contest end date.
+Each Problem should have submission_names
+It should remove the submission from the file, then should return the return_value to the submission log.
+
+double submit()
+
+
+What is the state of our problem.
+Kaggle
+	live_competitions
+		problem_1
+			output
+				submitted
+				waiting
+		problem_2
+			output
+				submitted
+				waiting
