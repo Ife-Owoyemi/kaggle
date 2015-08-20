@@ -1,0 +1,23 @@
+<!--Example XML File-->
+<pipeline>
+	<pipelineName>Process Name </pipelineName> <!--# Comes from the script, declared when the pipeline object is made-->
+	<pipelineVersion>0</pipelineName>          <!--# Helps with tracking versions.  In the case that you want to change something but not create a new method with a new name.-->
+	<stageFG>                                  <!--# Comes from the function, but given to them by the pipeline.-->
+		<method>
+			<methodName>something</methodName> <!--#Property of the method, made when the implementation is made : Stored as string-->
+			<methodNotes>This is a good method</methodNotes>  <!--# given to the method as a parameter : Stored as a string-->
+			<userId>FR</userId>   <!--# Given to the method as a parameter   : stored as a string-->
+			<date>07/15/15</date> <!--# Made by the System Library : Derived by method-->
+			<params>              <!--# Given to the method as a parameter: Stored as dictionary-->
+				<paramName>alpha</paramName><paramValue>.8</paramValue>
+			</params>
+			<paramNotes></paramNotes>
+		</method>
+	</stageFG>
+	<stageFM>
+	</stageFM>
+	<stagePA>
+	</stagePA>
+	<stageE>
+	</stageE>
+</pipeline>
