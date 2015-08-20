@@ -1,4 +1,0 @@
-Submissions
-PCA_SVM:           .98529
-KS_NeuralNetworks: .93371
-
