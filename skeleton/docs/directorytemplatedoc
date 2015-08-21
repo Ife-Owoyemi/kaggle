@@ -1,0 +1,28 @@
+Our pipeline manager program requires a file structure to make data managment simpler.
+This is built on the idea that our program will be used for Kaggle contests, both individual and team projects.
+
+PROBLEMS
+	PROBLEM_ONE_NAME
+		data
+			input
+			intermediary
+			output
+		pipelines
+		logs
+	PROBLEM_TWO_NAME
+
+PROBLEMS: is the directory that will hold all the projects.
+
+PROBLEM_ONE_NAME: is the name of the project, ideally you would name it after an abreviation or the full name of the problem as it is listed in Kaggle but that is a matter of taste.
+
+input: is the directory where you place the input files provided by kaggle. we expect two files: test.csv, train.csv or gziped versions. The naming is important, as our methods depend on it for setting class variable.  In later releases we may make this configurable.
+
+intermediary: is the directory where we plan to put intermediary files of different pipelines in future releases to reduce computation and redundant data. 
+
+output: is the directory where you place a sample submission file.  The program will use this file as a template for all new submissions.
+
+pipelines: is the directory in which you should store all pipelines for a given project.  We have a folder placed within the directory in the spirit of dependency injection. This will allow pipelines to be independent of their problems, and ideally allow use of pipelines in similar problems as a starting point.
+
+Note on file managment in the repository: We plan to have a discussion on data files in the git. Given that they are compressed, it may make sense to store a select few in the repository for completeness. Further releases will address this design decision.
+
+logs: Documentation to come.
