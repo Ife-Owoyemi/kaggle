@@ -1,0 +1,5 @@
+Online References
+For naming conventions see the following article:
+	http://osherove.com/blog/2005/4/3/naming-standards-for-unit-tests.html
+For more information on nose testing, seek the following article:
+	http://pythontesting.net/framework/nose/nose-fixture-reference/
