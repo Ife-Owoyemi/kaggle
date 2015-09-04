@@ -1,0 +1,7 @@
+Pipeline Manager Documentation
+
+
+__init__: 
+	summary: Constructor that processes the given name, and grabs the information if there is not a config file.
+	name - should be a string that is the name you are going to give your pipeline.
+load_featured_data:

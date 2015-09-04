@@ -1,0 +1,16 @@
+<config>
+	<data>
+		<input>
+		</input>
+		<intermediary>
+		</intermediary>
+		<output>
+			<header>True</header>
+			<predIndex>0</predIndex>
+		</output>
+	</data>
+	<logs>
+	</logs>
+	<pipelines>
+	</pipelines>
+</config>
