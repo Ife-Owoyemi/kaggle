@@ -6,29 +6,65 @@ import platform
 import os.path
 import personalLibrary
 import time
+import xml.etree.ElementTree as ET
 from datetime import date
 if( platform.system() == "Windows"):
-    SLASH = "\\"
+    , = "\\"
 else:
-    SLASH = "/"
+    , = "/"
 
 # Class Definition
 class PipelineManager:
     'Common Base Class for all Project Predictions' # ClassName._doc_
     # Class Static Variables
-    INPUT_PATH = ".." + SLASH + "data" + SLASH + "input" + SLASH
+    PROJECT_ROOT_DIR = ".."
+    INPUT_DIR = PROJECT_ROOT_DIR + , + "data" + , + "input" + ,
+    INTERMEDIARY_DIR = PROJECT_ROOT_DIR + , + "data" + , + "intermediary" + ,
+    OUTPUT_DIR = PROJECT_ROOT_DIR + , + "data" + , + "output" + ,
     TRAIN_DATA = "train.csv"
     TEST_DATA = "test.csv" 
-    OUTPUT_PATH = ".." + SLASH + "data" + SLASH + "output" + SLASH
-    INTERMEDIARY_PATH = ".." + SLASH + "data" + SLASH + "intermediary" + SLASH
-    REPORT_PATH = "." + SLASH + "reports" + SLASH
+    REPORT_DIR = "." + , + "reports" + ,
+    CONFIG_FILE = "config.xml"
+    CONFIG_FILE_PATH = PROJECT_ROOT_DIR + , + CONFIG_FILE
     Y_COL = 0 ## keep in mind in case it moves
     def __init__(self, name):
         self.name = name
+        self.load_config_file
     def load_featured_data(self):
         # Check if the file for csv
-        print(PipelineManager.INPUT_PATH + PipelineManager.TRAIN_DATA)
-        self.labeled_xy = pd.read_csv(personalLibrary.find_data_filename(PipelineManager.INPUT_PATH + PipelineManager.TRAIN_DATA))
-        self.unlabeled_x = pd.read_csv(personalLibrary.find_data_filename(PipelineManager.INPUT_PATH + PipelineManager.TEST_DATA))
+        self.labeled_xy = pd.read_csv(personalLibrary.find_data_filename(PipelineManager.INPUT_DIR + PipelineManager.TRAIN_DATA))
+        self.unlabeled_x = pd.read_csv(personalLibrary.find_data_filename(PipelineManager.INPUT_DIR + PipelineManager.TEST_DATA))
         self.num_features = self.labeled_xy.shape[1] - 1
-        self.num_examples = self.labeled_xy.shape[0] - 1
+        self.num_examples = self.labeled_xy.shape[0] 
+    def write_compressed_submission(self):
+        self.sample_submission = pd.read_csv(personalLibrary.find_data_filename(PipelineManager.OUTPUT_DIR + "sample_submission"  + ".csv"))
+        # Then see how many headers it has
+        columns = self.sample_submission.columns.values.tolist()
+        # If it has 1
+        if(len(columns)== 1):
+            pd.DataFrame({columns[0]: self.y_test}).to_csv(OUTPUT_DIR + self.name+'.csv', index=False, header=True)
+        # If it has two
+        elif(len(columns) == 2):
+            a = 0
+            b = 1
+            if(pred_index):
+                a = 1
+                b = 0
+            pd.DataFrame({columns[a]: range(1,len(self.y_test)+1), columns[b]: self.y_test}).to_csv(OUTPUT_DIR + self.name+'.csv', index=False, header=self.submission_header)
+        f_in = open(OUTPUT_DIR +self.name+'.csv', 'rb')
+        f_out = gzip.open(OUTPUT_DIR +self.name + '.csv'+'.gz', 'wb')
+        f_out.writelines(f_in)
+        f_out.close()
+        f_in.close()
+    def load_config_file(self):
+        config_tree = ET.parse(self.CONFIG_FILE_PATH)
+        config_root = config_tree.getroot()
+        header = config_root.find('data').find('output').find('header').text
+        if(header == 'True'):
+            self.header = True
+        elif(header == 'False'):
+            self.header = False
+        else:
+            raise ValueError("config.xml header field incorrectly configured")
+        predIndex = config_root.find('data').find('output').find('predIndex').text
+        self.pred_index = int(predIndex)

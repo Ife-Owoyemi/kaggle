@@ -6,57 +6,16 @@ import platform
 import os.path
 import time
 from datetime import date
-if( platform.system() == "Windows"):
-    SLASH = "\\"
-else:
-    SLASH = "/"
-# Methods for handling XML Logging
-def xmlOpenTag(string):
-    return "<" + string ">"
-def xmlCloseTag(string):
-    return "</" + string + ">"
-def xmlBody(tag_array, body_array):
-    xmlList = []
-    for indx, entry in enumerate(tag_array):
-        xmlList[indx] = xmlOpenTag(entry) + body_array[indx] + xmlCloseTag(entry) + "\n"
-    return xmlList
-def stringXmlBody(array):
-    string = ""
-    for entry in array:
-        string += entry
-    return string
-# Class for all methods to inherit their loggin behavior. Preset
-class Event:
-    'General Class for logging behavior'
-    def _init_(self):
-        self.name = ""
-        self.method_notes = ""
-        self.user_id = ""
-        self.date = ""
-        self.parameter_notes = ""        
-        self.stage = ""
-        self.method_id = ""
-
-    def generate_id(self):
-        self.method_id = self.stage + self.name + self.parameter_names
-        return self.method_id
-    def log(self,MLPM_object):
-        parameter_string = stringXmlBody(xmlBody(self.parameter_names, self.parameter_values))
-        method_name
-        message_body_tags =["methodName", "notes", "userId", "date", "params", "parameterNotes"]
-        message_body = [self.name, self.method_notes, self.user_id , self.date , parameter_string , self.parameter_notes] 
-        MLPM_object.log_body(xmlOpenTag("method") + message_body + xmlCloseTag("method"), self.stage)
-
 # Class Definition
 class MLPipelineManager:
     'Common Base Class for all Project Predictions' # ClassName._doc_
     # Class Static Variables
-    INPUT_PATH = ".." + SLASH + " data" + SLASH + " input" + SLASH
+    INPUT_PATH = ".." + , + " data" + , + " input" + ,
     TRAIN_DATA = "train.csv.zip"
     TEST_DATA = "test.csv.zip" 
-    OUTPUT_PATH = ".." + SLASH + " data" + SLASH + " output" + SLASH
-    INTERMEDIARY_PATH = ".." + SLASH + " data" + SLASH + " intermediary" + SLASH
-    REPORT_PATH = "." + SLASH + "reports" + SLASH
+    OUTPUT_PATH = ".." + , + " data" + , + " output" + ,
+    INTERMEDIARY_PATH = ".." + , + " data" + , + " intermediary" + ,
+    REPORT_PATH = "." + , + "reports" + ,
     Y_COL = 0 ## keep in mind in case it moves
     def _init_(self, name)):
         self.percent_train = 80  # THE REST WILL BE USED FOR CROSS VALIDATION SET
@@ -86,22 +45,6 @@ class MLPipelineManager:
             self.new_method = True
             self.version += 1
             return True
-    def get_submission_format(self):
-        # Add a line that checks if there is a sample submission in the outputfile
-        fo = open(OUTPUT_PATH + "sample.csv", "rw+")
-        line = fo.readline()
-        labels = line.split(",",2)
-        self.ouput_label1 = labels[0]
-        self.output_label2 = labels[1]
-### Should we have unfeatured data we will deal with it then.
-    def load_raw_as_featured(self):
-        self.labeled_xy = pd.read_csv(INPUT_PATH+TRAIN_DATA)
-        self.unlabeled_x = pd.read_csv(INPUT_PATH+TEST_DATA)
-        self.num_features = labeled_xy.shape[1]
-        self.num_examples = labeled_xy.shape[0]
-        self.split_train_csv()
-        self.x_test = unlabeled_x.values
-        self.y_test = unlabeled_x.values  # just a placeholder
     # There are different ways to do cross validation.
     # K-fold cross-validation, K = 5, 10
     # leave out one cross validation # Very computationally expensive
@@ -160,29 +103,6 @@ class MLPipelineManager:
         f_out.close()
         f_in.close()
     # train_x, train_y, test_x for self
-    def FGmethod(self, object):
-        stage = "FG"
-        if(object.STAGENAME != stage)
-            # Return with error
-            print function + object.name + " is not a valid parameter for the " + stage + "method because it is of stage " + object.stage + "\n"
-        else:
-            # Check for one of two things
-            #   Has a new method been found previously
-            #   is this a new method
-            # If either of them is true then we have to run the method
-            # Otherwise we continue
-            if(self.new_method || !self.check_method(object.generate_id)):
-                # Object should do work here
-                self.train_x, self.train_y, self.test_x = object.run(self.train_x, self.train_y, self.test_x)
-                if(self.submit):
-                    self.log_event(object)
-            else:
-                self.load_interm_data(self.name + "_" + self.version + "_" + object.name)
-                # It should do the equivalent
-                # In this case load the latest data
-                # which should have the name based on
-                # pipeline + verion + method
-    # Returns train_x, train_y, test_x to self
     def FMmethod(self, object):
         stage = "FM"
         if(object.STAGENAME != stage)
@@ -222,26 +142,6 @@ class MLPipelineManager:
                 # These parameters exist in the xml file, find them
                 self.load_interm_data(self.name + "_" + self.version + "_" + object.name)
     # Returns test_y to self
-    def PAmethod(self, object_1, object_2):
-        stage = "PA"
-        if(object.STAGENAME != stage)
-            # Return with error
-            print function + object.name + " is not a valid parameter for the " + stage + "method because it is of stage " + object.stage + "\n"
-        else:
-                        # Check for one of two things
-            #   Has a new method been found previously
-            #   is this a new method
-            # If either of them is true then we have to run the method
-            # Otherwise we continue
-            if(self.new_method || !self.check_method(object.generate_id)):
-                self.train_y = object.work(self.train_x, self.train_y, self.test_x)
-                if(self.submit):
-                    self.log_event(object)
-            else:
-                # submission should exist in intermediary file if it was not the last submission
-                self.load_interm_data(self.name + "_" + self.version + "_" + object.name)
-                #pipeline + version + method_name
-    # Can be done later
     def Emethod(self, object):
         stage = "E"
         if(object.STAGENAME != stage)
@@ -278,49 +178,7 @@ class MLPipelineManager:
 
 # These should be wrappers for the sci-kit functions
 # They should have a dictionary of parameters, set to the initial default parameters but changed if we change them.
-class FeatureGenerator( Event):
-    'Takes Raw Data and Produces Features' # ClassName._doc_
-    STAGENAME = "FG"
-    def _init_(self,user_id,name = "", method_notes = None,params = None, parameter_notes = None,  ):
-        self.user_id = user_id
-        self.name = name
-        if not method_notes:
-            self.method_notes = []
-        if not params:
-            self.params = {}
-        if not parameter_notes:
-            self.parameter_notes = []
-        self.date = date.today
-        
-        self.stage = ID
 
-        self.method_id = ""
-    def run():
-class PCAwrapper(FeatureGenerator):
-    'Wrapper for scikit-learn pca function'
-    FUNCTIONNAME = "scikit-PCA"
-    DEFAULTPARAMS = {"n_components": .8, "copy": False, "whiten":False}
-    def _init_(self,user_id, method_notes = None,params = None, parameter_notes = None,  ):
-        self.user_id = user_id
-        self.name = FUNCTIONNAME
-        if not method_notes:
-            self.method_notes = []
-        if not params:
-            self.params = {}
-        if not parameter_notes:
-            self.parameter_notes = []
-        # Generated by class or functions
-        self.date = date.today
-        self.stage = STAGENAME
-        self.method_id = ""
-    def run(self,po):
-        pca = PCA(n_components = self.params["n_components"],copy = self.params["copy"], whiten = self.params["whiten"])
-        po.train_x = pca.fit_transform(po.train_x)
-        po.test_x = pca.transform(po.test_x)
-    def addDefaults(self,params):
-        for key in PCAwrapper.DEFAULTPARAMS:
-            if key not in params:
-                parmams[key] = PCAwrapper.DEFAULTPARAMS[key]
 class FeatureSelector( Event):
     'Subsets Feature Data' # ClassName._doc_
     STAGENAME = "FS"
@@ -330,42 +188,10 @@ class ParameterFinder(Event):
     'Finds features for a given event'
     STAGENAME = "PF"
     def _init_(self):
-class PredictionAlgorithm( Event):
-    'Takes Feature Data and Produces a Prediction' # ClassName._doc_
-    STAGENAME = "PA"
-    def _init_(self):
 
-    def run():
 #Documentation can be found here.
 #http://scikit-learn.org/stable/modules/generated/sklearn.neighbors.KNeighborsClassifier.html#sklearn.neighbors.KNeighborsClassifier
-class KNNwrapper(PredictionAlgorithm):
-    'Wrapper for scikit-learn pca function'
-    FUNCTIONNAME = "scikit-KNearest Neighbors"
-    DEFAULTPARAMS = {"n_neighbors": 5, "weights": "uniform", "algorithm":"auto", "leaf_size": 30, "metric": "minkowski", "p": 2, "metric_params":None}
-    def _init_(self,user_id, method_notes = None,params = None, parameter_notes = None,  ):
-        self.user_id = user_id
-        self.name = FUNCTIONNAME
-        if not method_notes:
-            self.method_notes = []
-        if not params:
-            self.params = {}
-        if not parameter_notes:
-            self.parameter_notes = []
-        # Generated by class or functions
-        self.date = date.today
-        self.stage = STAGENAME
-        self.method_id = ""
-        self.addDefaults(self.params)
 
-    def run(self,po):
-        # Makes the object with the parameters
-        neigh = KNeighborsClassifier(n_neighbors = self.params[n_neighbors], weights = self.params["weights"], algorithm = self.params["auto"], leaf_size = self.params["leaf_size"], metric = self.params["metric"], metric_params = self.params["metric_params"])
-        neigh.fit(po.train_x,po.train_y)
-        po.test_y = neigh.predict(po.test_x)
-    def addDefaults(self,params):
-    for key in KNNwrapper.DEFAULTPARAMS:
-        if key not in params:
-            parmams[key] = PCAwrapper.DEFAULTPARAMS[key]
 class Ensemble( Event):
     'Takes Feature Data and Produces a Prediction from many Prediction Models' # ClassName._doc_
     STAGENAME = "E "

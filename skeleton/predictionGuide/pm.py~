@@ -5,20 +5,20 @@ import math
 import platform
 import os.path
 if( platform.system() == "Windows"):
-    SLASH = "\\"
+    , = "\\"
 else:
-    SLASH = "/"
+    , = "/"
 
 # Class Definition
 class MLPipelineManager:
     'Common Base Class for all Project Predictions' # ClassName._doc_
     # Class Static Variables
-    INPUT_PATH = ".." + SLASH + " data" + SLASH + " input" + SLASH
+    INPUT_PATH = ".." + , + " data" + , + " input" + ,
     TRAIN_DATA = "train.csv.zip"
     TEST_DATA = "test.csv.zip" 
-    OUTPUT_PATH = ".." + SLASH + " data" + SLASH + " output" + SLASH
-    INTERMEDIARY_PATH = ".." + SLASH + " data" + SLASH + " intermediary" + SLASH
-    REPORT_PATH = "." + SLASH + "reports" + SLASH
+    OUTPUT_PATH = ".." + , + " data" + , + " output" + ,
+    INTERMEDIARY_PATH = ".." + , + " data" + , + " intermediary" + ,
+    REPORT_PATH = "." + , + "reports" + ,
     Y_COL = 0 ## keep in mind in case it moves
     def _init_(name)):
         self.percent_train = 80  # THE REST WILL BE USED FOR CROSS VALIDATION SET

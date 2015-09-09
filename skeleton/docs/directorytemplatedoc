@@ -23,6 +23,15 @@ output: is the directory where you place a sample submission file.  The program 
 
 pipelines: is the directory in which you should store all pipelines for a given project.  We have a folder placed within the directory in the spirit of dependency injection. This will allow pipelines to be independent of their problems, and ideally allow use of pipelines in similar problems as a starting point.
 
+Note on directory construction: I think that the directory should be created automatically, and fed the files that it needs.  I will add it as an issue but should look something like this
+Make a folder
+Go into it and run the command, new DataScienceProblem
+It will create the directories then ask you the following two questions so that it can create a config file:
+	Does the sample submission have headers?
+	Does your submission file have more than one column(i.e. does it have a column other than the prediction value, e.g. and id column)
+		if yes:
+			What is the location of the column?(enter 1 for first, 2 for second,  etc.)
+	end
 Note on file managment in the repository: We plan to have a discussion on data files in the git. Given that they are compressed, it may make sense to store a select few in the repository for completeness. Further releases will address this design decision.
 
 logs: Documentation to come.
