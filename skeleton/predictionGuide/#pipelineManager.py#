@@ -1,0 +1,94 @@
+# Finding the OS Type
+import pandas as pd
+import gzip
+import math
+import platform
+import os.path
+import personalLibrary
+import time
+import xml.etree.ElementTree as ET
+from datetime import date
+if( platform.system() == "Windows"):
+    , = "\\"
+else:
+    , = "/"
+
+# Class Definition
+class PipelineManager:
+    'Common Base Class for all Project Predictions' # ClassName._doc_
+    # Class Static Variables
+    PROJECT_ROOT_DIR = ".."
+    INPUT_DIR = PROJECT_ROOT_DIR + , + "data" + , + "input" + ,
+    INTERMEDIARY_DIR = PROJECT_ROOT_DIR + , + "data" + , + "intermediary" + ,
+    OUTPUT_DIR = PROJECT_ROOT_DIR + , + "data" + , + "output" + ,
+    SUBMISSION_FILE_SUFFIX = "submission.csv"
+    TRAIN_DATA = "train.csv"
+    TEST_DATA = "test.csv" 
+    REPORT_DIR = "." + , + "reports" + ,
+    CONFIG_FILE = "config.xml"
+    CONFIG_FILE_PATH = PROJECT_ROOT_DIR + , + CONFIG_FILE
+    Y_COL = 0 ## keep in mind in case it moves
+    def __init__(self, name):
+        # This is used in writing the output so it cannot have spaces
+        self.name = name.replace(" ", "_")
+        self.load_config_file
+    def load_featured_data(self):
+        # Will keep a panda data frame, even if there are no headers
+        # The headers will be removed if necessary
+        # when the submission
+        # Check if the file for csv
+        self.labeled_xy = pd.read_csv(personalLibrary.find_data_filename(PipelineManager.INPUT_DIR + PipelineManager.TRAIN_DATA))
+        self.unlabeled_x = pd.read_csv(personalLibrary.find_data_filename(PipelineManager.INPUT_DIR + PipelineManager.TEST_DATA))
+        self.num_features = self.labeled_xy.shape[1] - 1
+        self.num_examples = self.labeled_xy.shape[0] 
+    def create_submission_data_frame(self):
+        self.sample_submission = pd.read_csv(personalLibrary.find_data_filename(PipelineManager.OUTPUT_DIR + "sample_submission"  + ".csv"))
+        if(len(columns)== 1):
+            self.submission_data_frame = pd.DataFrame({columns[0]: self.y_test})
+        # If it has two
+        elif(len(columns) == 2):
+            a = 0
+            b = 1
+            if(pred_index):
+                a = 1
+                b = 0
+            self.submission_data_frame = pd.DataFrame({columns[a]: range(1,len(self.y_test)+1), columns[b]: self.y_test})
+    def write_compressed_submission(self):
+        # Make the prediction list into a dictionary
+        # list1=['a','b','c','d']
+        # list2=[1,2,3,4]
+        # dict_list=zip(list1, list2)
+        # dict(dict_list)
+        # Result dict_list is a dictionary
+
+        # Then see how many headers it has
+        columns = self.sample_submission.columns.values.tolist()
+        # If it has 1
+        if(len(columns)== 1):
+            pd.DataFrame({columns[0]: self.y_test}).to_csv(PipelineManager.OUTPUT_DIR + self.name+'.csv', index=False, header=True)
+        # If it has two
+        elif(len(columns) == 2):
+            a = 0
+            b = 1
+            if(pred_index):
+                a = 1
+                b = 0
+            pd.DataFrame({columns[a]: range(1,len(self.y_test)+1), columns[b]: self.y_test}).to_csv(PipelineManager.OUTPUT_DIR + self.name + PipelineManager.SUBMISSION_FILE_SUFFIX + '.csv', index=False, header=self.submission_header)
+
+        f_in = open(PipelineManager.OUTPUT_DIR +self.name+'.csv', 'rb')
+        f_out = gzip.open(PipelineManager.OUTPUT_DIR +self.name + '.csv'+'.gz', 'wb')
+        f_out.writelines(f_in)
+        f_out.close()
+        f_in.close()
+    def load_config_file(self):
+        config_tree = ET.parse(PipelineManager.CONFIG_FILE_PATH)
+        config_root = config_tree.getroot()
+        header = config_root.find('data').find('output').find('header').text
+        if(header == 'True'):
+            self.header = True
+        elif(header == 'False'):
+            self.header = False
+        else:
+            raise ValueError("config.xml header field incorrectly configured")
+        pred_index = config_root.find('data').find('output').find('predIndex').text
+        self.pred_index = int(pred_index)

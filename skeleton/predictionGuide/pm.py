@@ -9,23 +9,7 @@ from datetime import date
 # Class Definition
 class MLPipelineManager:
     'Common Base Class for all Project Predictions' # ClassName._doc_
-    # Class Static Variables
-    INPUT_PATH = ".." + , + " data" + , + " input" + ,
-    TRAIN_DATA = "train.csv.zip"
-    TEST_DATA = "test.csv.zip" 
-    OUTPUT_PATH = ".." + , + " data" + , + " output" + ,
-    INTERMEDIARY_PATH = ".." + , + " data" + , + " intermediary" + ,
-    REPORT_PATH = "." + , + "reports" + ,
-    Y_COL = 0 ## keep in mind in case it moves
     def _init_(self, name)):
-        self.percent_train = 80  # THE REST WILL BE USED FOR CROSS VALIDATION SET
-        self.name = name
-        # Why do we have a load report?
-        # The real thing we want to do is to check against an existing run of this file.
-        # If there exists one by name then we should run it method by method to see where the discrepency is.
-        # That is what the load report it.
-        # It should then when its running.  Check against the previous report for changes, no code should run unless there is a change.
-        self.method_id_array = [];
         self.load_report()
         # Create the dictionary with empty arrays and the appropriate keys
         self.report_array = {
@@ -71,7 +55,7 @@ class MLPipelineManager:
         #   method_id_array
         #   get version( version will be incremented if there is a difference in the method inputs)
         #       if there is no file, version is 0
-        '''
+        
         Outdated
         self.log_array = {"FG": [], "FS":[], "PA": [], "E": []}            
         if(os.path.exists(REPORT_PATH+self.name+".txt")):
@@ -87,14 +71,8 @@ class MLPipelineManager:
                         key == 3
                     else: 
                         self.log_array[pipe_options[key]].append(line)
-        '''
-    def compile_report(self):
-        target = open(REPORT_PATH + self.name + ".txt", "w")
-        for key in self.log_array:
-            for entry in self.log_array(key):
-                target.write(entry)
-                target.write("\n")
-        target.close()
+        
+
     def write_compressed_submission(self):
         pd.DataFrame({self.label1: range(1,len(self.y_test)+1), self.label2: self.y_test}).to_csv(OUTPUT_PATH + self.name+'.csv', index=False, header=True)
         f_in = open(OUTPUT_PATH +self.name+'.csv', 'rb')

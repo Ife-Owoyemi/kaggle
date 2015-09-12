@@ -28,7 +28,7 @@ class PipelineManager:
     FULL_SAMPLE_SUBMISSION_PATH = os.path.join(OUTPUT_DIR, SAMPLE_SUBMISSION)
     FULL_TRAIN_DATA_PATH = os.path.join(INPUT_DIR, TRAIN_DATA)
     FULL_TEST_DATA_PATH = os.path.join(INPUT_DIR, TEST_DATA)
-    REPORT_DIR = os.path.join(".","reports")
+    REPORTS_PATH = os.path.join(PROJECT_ROOT_DIR,"reports")
     CONFIG_FILE = "config.xml"
     FULL_CONFIG_FILE_PATH = os.path.join(PROJECT_ROOT_DIR,CONFIG_FILE)
     Y_COL = 0 # Assume that the the first column is the y label
@@ -37,9 +37,9 @@ class PipelineManager:
         # This is used in writing the output so it cannot have spaces
         self.name = name.replace(" ", "_")
         self.load_config_file()
-        self.submit = False
+        self.submit = True
         self.cross_percentage = cross_percentage
-        self.log = {"FG": [], "FS":[], "PA": [], "E": []}            
+        self.log = {"FG": [], "FM":[], "PA": [], "E": []}            
         self.event_count = 0
     def load_featured_data(self):
         # Check if the file for csv
@@ -56,10 +56,11 @@ class PipelineManager:
         self.y_train = self.labeled_xy.values[0:self.num_train_rows, self.Y_COL]
         self.y_cross_val = self.labeled_xy.values[self.num_train_rows:, self.Y_COL]
     def write_submission(self):
+        self.compile_report()
         self.sample_submission = pd.read_csv(personalLibrary.find_data_filename(PipelineManager.FULL_SAMPLE_SUBMISSION_PATH))
         # Then see how many headers it has
         columns = self.sample_submission.columns.values.tolist()
-        pd.DataFrame({columns[0]: self.y_test}).to_csv(self.get_submission_path(), index=False, header=self.header)
+        pd.DataFrame({columns[self.pred_index]: self.y_test}).to_csv(self.get_submission_path(), index=False, header=self.header)
         self.FULL_SUBMISSION_PATH = self.get_submission_path()
     def write_compressed_submission(self):
         self.write_submission()
@@ -97,7 +98,7 @@ class PipelineManager:
         else:
             object.run(self)
             if(self.submit):
-                self.log_event(object)
+#                self.log_event(object)
                 object.event_count = self.event_count
                 self.event_count += 1
                 self.log[stage].append(object)
@@ -120,9 +121,8 @@ class PipelineManager:
             stage = ET.SubElement(root, "stage"+ key)
             for entry in self.log[key]:
                 entry.log(stage)
-
         tree = ET.ElementTree(root)
-        tree.write(REPORT_PATH + self.name + ".xml")
+        tree.write(os.path.join(PipelineManager.REPORTS_PATH, self.name + ".xml"))
 class Event:
     'General Class for logging behavior'
     __metaclass__ = ABCMeta
@@ -151,20 +151,20 @@ class Event:
                     self.params[key] = defaults[key]
     def log(self, stage):
         method = ET.SubElement(stage, "method")
-        method.set("eventCount", entry.event_count.str())
-        method.set("method_id", entry.gen_imp_id())
+        #method.set("eventCount", str(self.event_count))
+        method.set("method_id", self.gen_imp_id())
         method_name = ET.SubElement(method, "methodName")
-        method_name.text = entry.name
+        method_name.text = self.name
         method_notes = ET.SubElement(method, "methodNotes")
-        method_notes.text = ';'.join(entry.method_notes)
+        method_notes.text = ';'.join(self.method_notes)
         user_id = ET.SubElement(method, "userId")
-        user_id.text = entry.user_id
+        user_id.text = self.user_id
         date = ET.SubElement(method, "date")
-        date.text = entry.date.strftime("%B %d, %Y")
+        # date.text = self.date.strftime("%B %d, %Y")
         # This may need to be implemented separately
         params = ET.SubElement(method, "params")
         for param_name in self.params.keys():
-            p = ET.SubElement(params, param_name)
+            p = ET.SubElement(params, str(param_name))
             p.text = self.params[param_name]
 
 
